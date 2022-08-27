@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MediatR;
 using System.Reflection;
+using Inventory.Infractracture.DbConfiguration.EntityFramework;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +38,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 using var servicesProvider = builder.Services.BuildServiceProvider();
-var context = servicesProvider.GetRequiredService<InventoryContext>();
+var context = servicesProvider.GetRequiredService<InventoryWriteContext>();
 context.Database.Migrate(); 
 
 app.Run();

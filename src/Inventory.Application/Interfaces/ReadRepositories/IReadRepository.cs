@@ -1,5 +1,4 @@
-﻿
-namespace Inventory.Infractracture.Interfaces;
+﻿namespace Inventory.Application.Interfaces.ReadRepositories;
 
 public interface IReadRepository<T> where T : class
 {

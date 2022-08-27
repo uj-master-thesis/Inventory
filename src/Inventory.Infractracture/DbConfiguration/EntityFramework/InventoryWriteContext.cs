@@ -2,13 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Thread = Inventory.Domain.Model.Thread;
 
-namespace Inventory.Infractracture.DbConfiguration;
-public class InventoryContext : DbContext
+namespace Inventory.Infractracture.DbConfiguration.EntityFramework;
+public class InventoryWriteContext : DbContext
 {
     internal DbSet<Post> Posts { get; set; }
     internal DbSet<Thread> Threads { get; set; }
 
-    public InventoryContext(DbContextOptions<InventoryContext> dbContextOptions) : base(dbContextOptions) 
+    public InventoryWriteContext(DbContextOptions<InventoryWriteContext> dbContextOptions) : base(dbContextOptions)
     { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

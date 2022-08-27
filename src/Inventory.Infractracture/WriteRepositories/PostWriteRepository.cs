@@ -1,14 +1,13 @@
-﻿
-using Inventory.Application.Interfaces;
+﻿using Inventory.Application.Interfaces.WriteRepositories;
 using Inventory.Domain.Model;
-using Inventory.Infractracture.DbConfiguration;
+using Inventory.Infractracture.DbConfiguration.EntityFramework;
 using Microsoft.Extensions.Logging;
 
 namespace Inventory.Infractracture.WriteRepositories;
 
-internal class PostWriteRepository : WriteRepository<Post>, IPostWriteRepository
+internal class PostWriteRepository : WriteBaseRepository<Post>, IPostWriteRepository
 {
-    public PostWriteRepository(ILogger<WriteRepository<Post>> logger, InventoryContext inventoryContext) : base(logger, inventoryContext)
+    public PostWriteRepository(ILogger<WriteBaseRepository<Post>> logger, InventoryWriteContext inventoryContext) : base(logger, inventoryContext)
     {
     }
 }

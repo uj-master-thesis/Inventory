@@ -1,4 +1,8 @@
-﻿using Inventory.Application.Interfaces;
+﻿using Inventory.Application.Interfaces.ReadRepositories;
+using Inventory.Application.Interfaces.WriteRepositories;
+using Inventory.Infractracture.DbConfiguration.Dapper;
+using Inventory.Infractracture.DbConfiguration.EntityFramework;
+using Inventory.Infractracture.ReadRepositories;
 using Inventory.Infractracture.WriteRepositories;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -15,9 +19,14 @@ public static class DbConfiguration
 
         services.AddMediatR(Assembly.GetExecutingAssembly());
 
-        services.AddSqlServer<InventoryContext>(config.ConectionString)
+        services.AddSingleton(config)
+                .AddSingleton<InventoryReadContext>()
+                .AddSqlServer<InventoryWriteContext>(config.ConectionString)
                 .AddScoped(typeof(IPostWriteRepository), typeof(PostWriteRepository))
-                .AddScoped(typeof(IThreadWriteRepository), typeof(ThreadWriteRepository));
+                .AddScoped(typeof(IThreadWriteRepository), typeof(ThreadWriteRepository))
+                .AddScoped<IReadPostRepository, PostReadRepository>()
+                .AddScoped<IReadThreadRepository, ThreadReadRepository>();
+
         return services;
     }                                                                                               
 }

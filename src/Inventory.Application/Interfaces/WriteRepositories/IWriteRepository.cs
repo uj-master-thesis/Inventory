@@ -1,5 +1,4 @@
-﻿
-namespace Inventory.Application.Interfaces;
+﻿namespace Inventory.Application.Interfaces.WriteRepositories;
 
 public interface IWriteRepository<T> where T : class
 {

@@ -1,4 +1,5 @@
 ﻿using Inventory.Application.Queries.GetThreadByIdQuery;
+using Inventory.Application.Queries.Thread.GetListOfThreadsQuery;
 using Inventory.Application.Response;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -20,5 +21,13 @@ public class ThreadController : ControllerBase
     {
         var post = await _mediatior.Send(new GetThreadByIdQuery() { Id = id });
         return Ok(post);
+    }
+
+    [HttpGet()]
+    [ProducesResponseType(typeof(List<GetThreadByIdResponse>), 200)]
+    public async Task<IActionResult> GetList()
+    {
+        var threads = await _mediatior.Send(new GetListOfThreadsQuery());
+        return Ok(threads);
     }
 }

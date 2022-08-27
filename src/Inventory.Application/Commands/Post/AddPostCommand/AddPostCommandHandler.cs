@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Inventory.Application.Interfaces;
+using Inventory.Application.Interfaces.WriteRepositories;
 using Inventory.Domain.Model;
 using MediatR;
 using Microsoft.Extensions.Logging;
