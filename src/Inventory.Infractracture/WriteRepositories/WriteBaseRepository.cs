@@ -17,7 +17,7 @@ internal abstract class WriteBaseRepository<T> : IWriteRepository<T>  where T : 
     {
        _logger.LogInformation($"Added entity to db. Type: {typeof(T)}");
         await _inventoryContext.Set<T>().AddAsync(entity);                              
-        await _inventoryContext.SaveChangesAsync();                             
+        await _inventoryContext.SaveChangesAsync();
         return entity; 
     }
 

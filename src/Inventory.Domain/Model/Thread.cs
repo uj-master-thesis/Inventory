@@ -7,5 +7,6 @@ public class Thread
     public string Name { get; set; }
     public string Description { get; set; }
     public int PostCount { get; set; }
-    public virtual ICollection<Post> Posts { get; set; }
+    public DateTime InsertDate { get; set; }
+    public virtual IList<Post> Posts { get; set; }
 }

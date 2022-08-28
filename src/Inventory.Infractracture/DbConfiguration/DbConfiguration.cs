@@ -22,8 +22,8 @@ public static class DbConfiguration
         services.AddSingleton(config)
                 .AddSingleton<InventoryReadContext>()
                 .AddSqlServer<InventoryWriteContext>(config.ConectionString)
-                .AddScoped(typeof(IPostWriteRepository), typeof(PostWriteRepository))
-                .AddScoped(typeof(IThreadWriteRepository), typeof(ThreadWriteRepository))
+                .AddScoped<IPostWriteRepository, PostWriteRepository>()
+                .AddScoped<IThreadWriteRepository, ThreadWriteRepository>()
                 .AddScoped<IReadPostRepository, PostReadRepository>()
                 .AddScoped<IReadThreadRepository, ThreadReadRepository>();
 

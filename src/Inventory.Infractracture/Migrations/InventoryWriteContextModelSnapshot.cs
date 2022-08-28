@@ -29,12 +29,18 @@ namespace Inventory.Infractracture.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("InsertDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("PostName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ThreadId")
@@ -57,9 +63,14 @@ namespace Inventory.Infractracture.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("InsertDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PostCount")

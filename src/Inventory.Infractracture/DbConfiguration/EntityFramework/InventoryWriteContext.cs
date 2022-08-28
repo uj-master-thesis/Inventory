@@ -16,7 +16,14 @@ public class InventoryWriteContext : DbContext
         modelBuilder.Entity<Post>(builder =>
         {
             builder.HasKey(p => p.Id);
-
+            builder.Property(w => w.PostName)
+                    .IsRequired();
+            builder.Property(w => w.Email)
+                   .IsRequired();
+            builder.Property(w => w.Description)
+                    .IsRequired();
+            builder.Property(w => w.PostName)
+                    .IsRequired();
             builder.HasOne(p => p.Thread)
                    .WithMany(t => t.Posts)
                    .HasForeignKey("ThreadId")
@@ -26,7 +33,10 @@ public class InventoryWriteContext : DbContext
         modelBuilder.Entity<Thread>(builder =>
         {
             builder.HasKey(t => t.Id);
-
+            builder.Property(w => w.Name)
+                   .IsRequired();
+            builder.Property(w => w.Description)
+                   .IsRequired();
         });
     }
 }

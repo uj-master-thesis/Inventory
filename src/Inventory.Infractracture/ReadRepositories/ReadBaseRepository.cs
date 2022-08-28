@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using Inventory.Application.Interfaces.ReadRepositories;
 using Inventory.Infractracture.DbConfiguration.Dapper;
+using Inventory.Infractracture.Utils;
 using Microsoft.Extensions.Logging;
 
 namespace Inventory.Infractracture.ReadRepositories;
@@ -17,7 +18,7 @@ internal abstract class ReadBaseRepository<T> : IReadRepository<T> where T : cla
         _context = context;
     }
 
-    protected async Task<List<T>> QueryList(string query, string[] param = null)
+    protected async Task<List<T>> QueryList(string query, DynamicParameters param = null)
     {
         _logger.LogInformation($"Get list of entitities. Type: {typeof(T)}");
         using var connection = _context.CreateConnection();
@@ -25,7 +26,7 @@ internal abstract class ReadBaseRepository<T> : IReadRepository<T> where T : cla
         return entities.ToList();
     }
 
-    protected async Task<T> QueryFirst(string query, string [] param)
+    protected async Task<T> QueryFirst(string query, DynamicParameters param)
     {
         _logger.LogInformation($"Get single entity. Type: {typeof(T)}");
         using var connection = _context.CreateConnection();
@@ -40,6 +41,6 @@ internal abstract class ReadBaseRepository<T> : IReadRepository<T> where T : cla
 
     public async Task<T> Get(Guid id)
     {
-        return await QueryFirst(QueryStringFirst, new [] { $"{id}" });
+        return await QueryFirst(QueryStringFirst, DynamincParametersFactory.CreateFromArray(new[] { ("@Id", $"{id}") }));
     }
 }

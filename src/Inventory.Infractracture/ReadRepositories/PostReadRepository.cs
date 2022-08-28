@@ -1,6 +1,7 @@
 ﻿using Inventory.Application.Interfaces.ReadRepositories;
 using Inventory.Domain.Model;
 using Inventory.Infractracture.DbConfiguration.Dapper;
+using Inventory.Infractracture.Utils;
 using Microsoft.Extensions.Logging;
 
 namespace Inventory.Infractracture.ReadRepositories;
@@ -10,11 +11,11 @@ internal class PostReadRepository : ReadBaseRepository<Post>, IReadPostRepositor
     public PostReadRepository(ILogger<ReadBaseRepository<Post>> logger, InventoryReadContext context) : base(logger, context)
     {
     }
-    protected override string QueryStringAll => "SELECT * SELECT Posts";
-    protected override string QueryStringFirst => "SELECT * FROM Posts WHERE Id = @Id";
+    protected override string QueryStringAll => "SELECT * FROM Posts";
+    protected override string QueryStringFirst => $"{QueryStringAll} WHERE Id = @Id";
 
     public async Task<List<Post>> GetPostsByUser(string email)
     {
-        return await QueryList("SELECT * FROM Posts WHERE Email = @Email", new[] { email });
+        return await QueryList($"{QueryStringAll} WHERE Email = @Email", DynamincParametersFactory.CreateFromArray(new[] { ("@Email", email) }));
     }
 }

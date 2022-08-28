@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inventory.Infractracture.Migrations
 {
     [DbContext(typeof(InventoryWriteContext))]
-    [Migration("20220827184136_InitialCreate")]
+    [Migration("20220828145515_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,12 +31,18 @@ namespace Inventory.Infractracture.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("InsertDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("PostName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ThreadId")
@@ -59,9 +65,14 @@ namespace Inventory.Infractracture.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("InsertDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PostCount")
