@@ -10,6 +10,9 @@ using MediatR;
 using System.Reflection;
 using Inventory.Infractracture.DbConfiguration.EntityFramework;
 
+
+// await InitKafka.Init(); 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -25,13 +28,10 @@ builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
 builder.Host.UseDefaultServiceProvider(options => options.ValidateScopes = false);
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
-app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.UseAuthorization();
 

@@ -31,12 +31,17 @@ internal class KafkaConsumerService : BackgroundService
         _consumer.Subscribe(new List<string> { kafkaConfiguration.TopicName }); 
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override  Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        return ConsumeMessage(stoppingToken); 
+    }
+
+    private async Task ConsumeMessage(CancellationToken cancellationToken)
     {
         _logger.LogInformation("Start consumig events from kafka");
         await Task.Delay(1000);
         ConsumeResult<string, string> mesageToConsume = null;
-        while (!stoppingToken.IsCancellationRequested)
+        while (!cancellationToken.IsCancellationRequested)
         {
             try
             {
@@ -48,7 +53,7 @@ internal class KafkaConsumerService : BackgroundService
             {
                 _logger.LogError(brkEx, $"Circuit was open. EventId: {mesageToConsume?.Message.Key}");
             }
-            catch (Exception ex)                                                                                                    
+            catch (Exception ex)
             {
                 _logger.LogError(ex, $"Failed consumming event. EventId: {mesageToConsume?.Message.Key}");
             }
