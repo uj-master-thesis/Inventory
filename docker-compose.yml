@@ -8,9 +8,6 @@ services:
       ports:
         - "14331:1433" 
 
-      # networks: 
-      #   - broker-kafka
-        
     inventory:
         build: 
             context: ./src
@@ -21,12 +18,8 @@ services:
           - db
           - zookeeper
           - kafka
-          - init-kafka
         environment:
             ASPNETCORE_ENVIRONMENT: "Docker"
-
-        # networks: 
-        #   - broker-kafka
 
     zookeeper:
       image: wurstmeister/zookeeper
