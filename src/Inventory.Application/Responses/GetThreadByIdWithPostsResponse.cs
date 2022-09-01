@@ -5,5 +5,6 @@ namespace Inventory.Application.Responses;
 
 public class GetThreadByIdWithPostsResponse : GetThreadByIdResponse
 {
-    List<GetPostByIdResponse> Posts; 
+    public List<GetPostByIdResponse> Posts { get; set; }
+    public int PostCount { get; set; }
 }

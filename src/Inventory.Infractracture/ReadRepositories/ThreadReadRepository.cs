@@ -1,4 +1,6 @@
-﻿using Inventory.Application.Interfaces.ReadRepositories;
+﻿using Dapper;
+using Inventory.Application.Interfaces.ReadRepositories;
+using Inventory.Domain.Model;
 using Inventory.Infractracture.DbConfiguration.Dapper;
 using Inventory.Infractracture.Utils;
 using Microsoft.Extensions.Logging;
@@ -7,8 +9,10 @@ namespace Inventory.Infractracture.ReadRepositories;
 
 internal class ThreadReadRepository : ReadBaseRepository<Domain.Model.Thread>, IReadThreadRepository
 {
+    private readonly InventoryReadContext _context; 
     public ThreadReadRepository(ILogger<ReadBaseRepository<Domain.Model.Thread>> logger, InventoryReadContext context) : base(logger, context)
     {
+        _context = context; 
     }
 
     protected override string QueryStringAll  => "SELECT * FROM Threads"; 
@@ -16,7 +20,14 @@ internal class ThreadReadRepository : ReadBaseRepository<Domain.Model.Thread>, I
      
     public async Task<Domain.Model.Thread> GetThreadWithPosts(Guid id)
     {
-        var query = $"{QueryStringAll} INNER JOIN Posts ON Posts.ThreadId = Threads.Id WHERE Threads.Id = @Id"; 
-        return await QueryFirst(query, DynamincParametersFactory.CreateFromArray(new[] { ("@Id", $"{id}") })); 
+        var query = $"{QueryStringAll} LEFT JOIN Posts ON Posts.ThreadId = Threads.Id WHERE Threads.Id = @Id";
+        using var connection = _context.CreateConnection();
+        var result = await connection.QueryAsync<Domain.Model.Thread, Post, Domain.Model.Thread>(query, (t, p) =>
+        {
+            if (p is null) return t;
+            (t.Posts ??= new List<Post>()).Add(p); 
+            return t;
+        }, DynamincParametersFactory.CreateFromArray(new[] { ("@Id", $"{id}") }));
+        return result.FirstOrDefault(); 
     }
 }

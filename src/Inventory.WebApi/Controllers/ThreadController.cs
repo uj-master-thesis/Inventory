@@ -2,6 +2,7 @@
 using Inventory.Application.Queries.GetThreadByIdQuery;
 using Inventory.Application.Queries.Thread.GetListOfThreadsQuery;
 using Inventory.Application.Response;
+using Inventory.Application.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
@@ -31,15 +32,16 @@ public class ThreadController : ControllerBase
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
-        var post = await _mediatior.Send(new GetThreadByIdQuery() { Id = id });
-        return Ok(post);
+        var thread = await _mediatior.Send(new GetThreadByIdQuery() { Id = id });
+        return thread is not null ? Ok(thread) : NotFound();
     }
 
     [HttpGet("{id}/posts")]
-    [ProducesResponseType(typeof(GetThreadByIdResponse), 200)]
+    [ProducesResponseType(typeof(GetThreadByIdWithPostsResponse), 200)]
+    [ProducesResponseType(404)]
     public async Task<IActionResult> GetThreadPosts([FromRoute] Guid id)
     {
-        var post = await _mediatior.Send(new GetThreadWithPostsQuery() { ThreadId = id });
-        return Ok(post);
+        var thread = await _mediatior.Send(new GetThreadWithPostsQuery() { ThreadId = id });
+        return thread is not null ? Ok(thread) : NotFound();
     }
 }

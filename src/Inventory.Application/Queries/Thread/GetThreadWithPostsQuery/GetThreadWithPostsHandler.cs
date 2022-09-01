@@ -21,6 +21,8 @@ public class GetThreadWithPostsHandler : IRequestHandler<GetThreadWithPostsQuery
     async Task<GetThreadByIdWithPostsResponse> IRequestHandler<GetThreadWithPostsQuery, GetThreadByIdWithPostsResponse>.Handle(GetThreadWithPostsQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Executing query");
-        return  _mapper.Map<GetThreadByIdWithPostsResponse>(await _repository.GetThreadWithPosts(request.ThreadId));
+        var thread = await _repository.GetThreadWithPosts(request.ThreadId);
+        thread.Posts ??= new List<Domain.Model.Post>(); 
+        return  _mapper.Map<GetThreadByIdWithPostsResponse>(thread);
     }
 }

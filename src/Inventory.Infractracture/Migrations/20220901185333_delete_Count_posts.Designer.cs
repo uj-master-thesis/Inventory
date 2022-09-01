@@ -4,6 +4,7 @@ using Inventory.Infractracture.DbConfiguration.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inventory.Infractracture.Migrations
 {
     [DbContext(typeof(InventoryWriteContext))]
-    partial class InventoryWriteContextModelSnapshot : ModelSnapshot
+    [Migration("20220901185333_delete_Count_posts")]
+    partial class delete_Count_posts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

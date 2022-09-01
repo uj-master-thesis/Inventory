@@ -12,6 +12,7 @@ internal abstract class ReadBaseRepository<T> : IReadRepository<T> where T : cla
     private readonly InventoryReadContext _context;
     protected abstract string QueryStringAll { get;  }
     protected abstract string QueryStringFirst { get; }
+    protected string DefaultSort { get; } = "ORDER BY InsertDate DESC"; 
     public ReadBaseRepository(ILogger<ReadBaseRepository<T>> logger, InventoryReadContext context)
     {
         _logger = logger;
@@ -36,11 +37,11 @@ internal abstract class ReadBaseRepository<T> : IReadRepository<T> where T : cla
 
     public async Task<List<T>> GetAll()
     {
-        return await QueryList(QueryStringAll);
+        return await QueryList($"{QueryStringAll} {DefaultSort}");
     }
 
     public async Task<T> Get(Guid id)
     {
-        return await QueryFirst(QueryStringFirst, DynamincParametersFactory.CreateFromArray(new[] { ("@Id", $"{id}") }));
+        return await QueryFirst($"{QueryStringFirst} {DefaultSort}", DynamincParametersFactory.CreateFromArray(new[] { ("@Id", $"{id}") }));
     }
 }

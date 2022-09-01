@@ -32,11 +32,11 @@ public class PostController : ControllerBase
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         var post = await _mediatior.Send(new GetPostByIdQuery() { Id = id });
-        return Ok(post);
+        return post is not null ? Ok(post) : NotFound();
     }
 
     [HttpGet("{email}")]
-    [ProducesResponseType(typeof(GetPostByIdResponse), 200)]
+    [ProducesResponseType(typeof(List<GetPostByIdResponse>), 200)]
     public async Task<IActionResult> GeUserPosts([FromRoute] string email)
     {
         var post = await _mediatior.Send(new GetListOfPostsByEmailQuery() { Email = email });
