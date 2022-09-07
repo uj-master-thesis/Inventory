@@ -19,7 +19,7 @@ public class PostController : ControllerBase
     }
 
     [HttpGet()]
-    [ProducesResponseType(typeof(List<GetPostByIdResponse>), 200)]
+    [ProducesResponseType(typeof(List<GetPostResponse>), 200)]
     public async Task<IActionResult> GetList()
     {
         var posts = await _mediatior.Send(new GetListOfPostsQuery());
@@ -27,7 +27,7 @@ public class PostController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    [ProducesResponseType(typeof(GetPostByIdResponse), 200)]
+    [ProducesResponseType(typeof(GetPostResponse), 200)]
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
@@ -36,7 +36,7 @@ public class PostController : ControllerBase
     }
 
     [HttpGet("{email}")]
-    [ProducesResponseType(typeof(List<GetPostByIdResponse>), 200)]
+    [ProducesResponseType(typeof(List<GetPostResponse>), 200)]
     public async Task<IActionResult> GeUserPosts([FromRoute] string email)
     {
         var post = await _mediatior.Send(new GetListOfPostsByEmailQuery() { Email = email });

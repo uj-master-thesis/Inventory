@@ -3,12 +3,15 @@ namespace Inventory.Domain.Model;
 
 public class Post
 {
-    public Guid Id { get; set; }
-    public string PostName { get; set; }
+    public string Name { get; set; }
     public Uri? Uri { get; set; }
     public string Description { get; set; }
-    public string Email { get; set; }
-    public Guid ThreadId { get; set; }
-    public DateTime InsertDate { get; set; }
+    public string UserName { get; set; }
+    public DateTime TimeStamp { get; set; }
+    public int UpVotes { get; set; }
+    public int DownVotes { get; set; }
+    public string ThreadName{ get; set; }
     public virtual Thread Thread { get; set; }
+    public virtual IList<Comment> Comments { get; set; }
+    public virtual IList<Vote> Votes { get; set; }
 }

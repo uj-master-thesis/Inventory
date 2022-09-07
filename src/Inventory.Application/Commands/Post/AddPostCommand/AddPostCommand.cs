@@ -5,11 +5,9 @@ namespace Inventory.Application.Commands.AddPostCommand;
 
 public class AddPostCommand : IRequest
 {
-    public Guid Id { get; set; }
     public string PostName { get; set; }
     public Uri? Uri { get; set; }
     public string Description { get; set; }
-    public string Email { get; set; }
-    public Guid ThreadId { get; set; }
-
+    public string UserName { get; set; }
+    public string ThreadName { get; set; }
 }

@@ -27,6 +27,7 @@ public class ThreadController : ControllerBase
         return Ok(threads);
     }
 
+    [Obsolete]
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(GetThreadByIdResponse), 200)]
     [ProducesResponseType(404)]
@@ -36,6 +37,7 @@ public class ThreadController : ControllerBase
         return thread is not null ? Ok(thread) : NotFound();
     }
 
+    [Obsolete]
     [HttpGet("{id}/posts")]
     [ProducesResponseType(typeof(GetThreadByIdWithPostsResponse), 200)]
     [ProducesResponseType(404)]

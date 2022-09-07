@@ -5,6 +5,7 @@ using Inventory.Infractracture.DbConfiguration.EntityFramework;
 using Inventory.Infractracture.ReadRepositories;
 using Inventory.Infractracture.WriteRepositories;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -21,12 +22,17 @@ public static class DbConfiguration
 
         services.AddSingleton(config)
                 .AddSingleton<InventoryReadContext>()
-                .AddSqlServer<InventoryWriteContext>(config.ConectionString)
+                .AddDbContext<InventoryWriteContext>(options =>
+                {
+                    options.UseSqlServer(config.ConectionString);
+                    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                })
                 .AddScoped<IPostWriteRepository, PostWriteRepository>()
                 .AddScoped<IThreadWriteRepository, ThreadWriteRepository>()
+                .AddScoped<ICommentWriteRepository, CommentWriteRepository>()
                 .AddScoped<IReadPostRepository, PostReadRepository>()
-                .AddScoped<IReadThreadRepository, ThreadReadRepository>();
-
+                .AddScoped<IReadThreadRepository, ThreadReadRepository>()
+                .AddScoped<IVoteWriteRepository, VoteWriteRepository>();
         return services;
     }                                                                                               
 }

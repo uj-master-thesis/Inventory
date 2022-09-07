@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Inventory.Application.Queries.GestPostQuery;
 
-public class GetPostQueryHandler : IRequestHandler<GetPostByIdQuery, GetPostByIdResponse>
+public class GetPostQueryHandler : IRequestHandler<GetPostByIdQuery, GetPostResponse>
 {
     private readonly ILogger<GetPostQueryHandler> _logger;
     private readonly IMapper _mapper;
@@ -18,9 +18,9 @@ public class GetPostQueryHandler : IRequestHandler<GetPostByIdQuery, GetPostById
         _repository = repository; 
     }
 
-    async Task<GetPostByIdResponse> IRequestHandler<GetPostByIdQuery, GetPostByIdResponse>.Handle(GetPostByIdQuery request, CancellationToken cancellationToken)
+    async Task<GetPostResponse> IRequestHandler<GetPostByIdQuery, GetPostResponse>.Handle(GetPostByIdQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Executing query");
-        return _mapper.Map<GetPostByIdResponse>(await _repository.Get(request.Id)); 
+        return _mapper.Map<GetPostResponse>(await _repository.Get("")); 
     }
 }

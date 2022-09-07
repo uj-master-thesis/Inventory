@@ -21,6 +21,6 @@ public class GetThreadByIdQueryHandler : IRequestHandler<GetThreadByIdQuery, Get
     async Task<GetThreadByIdResponse> IRequestHandler<GetThreadByIdQuery, GetThreadByIdResponse>.Handle(GetThreadByIdQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Executing query");
-        return _mapper.Map<GetThreadByIdResponse>(await _repository.Get(request.Id));
+        return _mapper.Map<GetThreadByIdResponse>(await _repository.Get(""));
     }
 }

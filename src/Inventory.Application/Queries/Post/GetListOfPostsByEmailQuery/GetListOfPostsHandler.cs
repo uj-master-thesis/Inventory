@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Inventory.Application.Queries.Post;
 
-public class GetListOfPostsByEmailHandler : IRequestHandler<GetListOfPostsByEmailQuery, List<GetPostByIdResponse>>
+public class GetListOfPostsByEmailHandler : IRequestHandler<GetListOfPostsByEmailQuery, List<GetPostResponse>>
 {
     ILogger<GetListOfPostsByEmailHandler> _logger;
     private readonly IMapper _mapper;
@@ -17,10 +17,10 @@ public class GetListOfPostsByEmailHandler : IRequestHandler<GetListOfPostsByEmai
         _mapper = mapper;
         _repository = repository;
     }
-    public async Task<List<GetPostByIdResponse>> Handle(GetListOfPostsByEmailQuery request, CancellationToken cancellationToken)
+    public async Task<List<GetPostResponse>> Handle(GetListOfPostsByEmailQuery request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Executing query");
         var posts =  await _repository.GetPostsByUser(request.Email);
-        return posts.Select(p => _mapper.Map<GetPostByIdResponse>(p)).ToList();
+        return posts.Select(p => _mapper.Map<GetPostResponse>(p)).ToList();
     }
 }

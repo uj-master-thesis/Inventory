@@ -3,6 +3,7 @@ using MediatR;
 
 namespace Inventory.Application.Commands.UpdatePostCommand;
 
-public class UpdatePostCommand : Post, IRequest
+public class UpdatePostTimespanCommand : IRequest
 {
+    public string Name { get; set; }
 }

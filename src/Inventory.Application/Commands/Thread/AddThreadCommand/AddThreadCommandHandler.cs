@@ -19,7 +19,7 @@ public class AddThreadCommandHandler : IRequestHandler<AddThreadCommand, Unit>
 
     public async Task<Unit> Handle(AddThreadCommand request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Executing command: Add post {request.Id}");
+        _logger.LogInformation($"Executing command: Add post {request.Name}");
         var thread = _mapper.Map<Domain.Model.Thread>(request);
         await _writeRepository.Add(thread);
         return new Unit();

@@ -13,16 +13,21 @@ internal abstract class WriteBaseRepository<T> : IWriteRepository<T>  where T : 
         _logger = logger; 
         _inventoryContext = inventoryContext;
     }
-    public async Task<T> Add(T entity)
+    virtual public async Task<T> Add(T entity)
     {
+        _inventoryContext.ChangeTracker.Clear();
+
+
        _logger.LogInformation($"Added entity to db. Type: {typeof(T)}");
         await _inventoryContext.Set<T>().AddAsync(entity);                              
         await _inventoryContext.SaveChangesAsync();
         return entity; 
     }
 
-    public async Task<T> Delete(Guid id)
+    virtual public async Task<T> Delete(Guid id)
     {
+        _inventoryContext.ChangeTracker.Clear();
+
         _logger.LogInformation($"Delete entity to db. Type: {typeof(T)}");
         var entity = await _inventoryContext.Set<T>().FindAsync(id); 
          _inventoryContext.Set<T>().Remove(entity);
@@ -31,8 +36,11 @@ internal abstract class WriteBaseRepository<T> : IWriteRepository<T>  where T : 
         
     }
 
-    public async Task<T> Update(T entity)
+    virtual public async Task<T> Update(T entity)
     {
+        _inventoryContext.ChangeTracker.Clear();
+
+
         _logger.LogInformation($"Update entity to db. Type: {typeof(T)}");
         _inventoryContext.Set<T>().Update(entity);
         await _inventoryContext.SaveChangesAsync();
