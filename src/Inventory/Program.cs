@@ -36,11 +36,20 @@ app.UseSwaggerUI();
 app.UseAuthorization();
 
 app.MapControllers();
+try
+{
+    using var servicesProvider = builder.Services.BuildServiceProvider();
+    var context = servicesProvider.GetRequiredService<InventoryWriteContext>();
+    context.Database.Migrate();
+}
+catch (System.Exception ex )
+{
+    var p = 1; 
+    var k = ex; 
+}
 
-using var servicesProvider = builder.Services.BuildServiceProvider();
-var context = servicesProvider.GetRequiredService<InventoryWriteContext>();
-context.Database.Migrate(); 
 
 app.Run();
 
 
+public partial class Program { }

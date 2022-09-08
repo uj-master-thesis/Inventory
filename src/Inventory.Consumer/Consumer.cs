@@ -20,6 +20,7 @@ public static class Consumer
         });
         services.AddSingleton(config);
         services.AddSingleton<ICircuitBreakerFactory, CircuitBreakerFactory>();
+        services.AddSingleton<ISenderMessage, SenderMessage>(); 
         services.AddMediatR(Assembly.GetExecutingAssembly());                                                                                                               
         services.AddHostedService<KafkaConsumerService>();                                                       
     }                                                      

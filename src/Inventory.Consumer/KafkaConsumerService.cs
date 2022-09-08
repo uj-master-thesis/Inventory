@@ -19,24 +19,23 @@ internal class KafkaConsumerService : BackgroundService
     private readonly ILogger<KafkaConsumerService> _logger;
     private readonly IMediator _mediator;
     private readonly IConsumer<string, string> _consumer;
-    private readonly AsyncCircuitBreakerPolicy _circuitBreaker; 
+    private readonly AsyncCircuitBreakerPolicy _circuitBreaker;
+    private readonly ISenderMessage _sender; 
     public KafkaConsumerService(
         ILogger<KafkaConsumerService> logger,
         IMediator mediator, 
         IConsumer<string, string> consumer, 
         ICircuitBreakerFactory circuitBreakerFactory,
+        ISenderMessage sender,
         KafkaConfiguration kafkaConfiguration)
     {
         _logger = logger;
         _mediator = mediator;
         _consumer = consumer;
-        _circuitBreaker = circuitBreakerFactory.Create(); 
+        _circuitBreaker = circuitBreakerFactory.Create();
+        _sender = sender; 
         _consumer.Subscribe(new List<string> { kafkaConfiguration.TopicName }); 
     }
-    private const string AddThreadCommandKey = "name";
-    private const string AddPostCommandKey = "threadName";
-    private const string AddCommentCommandKey = "text";
-    private const string AddVoteCommandKey = "voteType";
 
     protected override  Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -54,7 +53,7 @@ internal class KafkaConsumerService : BackgroundService
             {
                 mesageToConsume = GetMessageToProcces(mesageToConsume);
                 _logger.LogInformation($"Processing event. EventId: {mesageToConsume.Message.Key}");
-                await _mediator.Send(GetCommand(mesageToConsume.Message));
+                await _sender.SendAsync(mesageToConsume.Message.Value);
             }
             catch (BrokenCircuitException brkEx)
             {
@@ -68,19 +67,7 @@ internal class KafkaConsumerService : BackgroundService
         _consumer.Close();
     }
 
-    private static IRequest GetCommand(Message<string, string> message)
-    {
-        var command = JsonSerializer.Deserialize<JsonObject>(message.Value) ?? throw new ArgumentNullException();
-        var settings = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
-        return command switch
-        {
-            var c when c.ContainsKey(AddThreadCommandKey) => JsonSerializer.Deserialize<AddThreadCommand>(command, settings),
-            var c when c.ContainsKey(AddPostCommandKey) => JsonSerializer.Deserialize<AddPostCommand>(command, settings),
-            var c when c.ContainsKey(AddCommentCommandKey) => JsonSerializer.Deserialize<AddCommentCommand>(command, settings),
-            var c when c.ContainsKey(AddVoteCommandKey) => JsonSerializer.Deserialize<AddVoteCommand>(command, settings),
-            _ => throw new NotImplementedException()
-        }; 
-    } 
+
     
     private ConsumeResult<string, string> GetMessageToProcces(ConsumeResult<string, string> prvMessage)
     {
