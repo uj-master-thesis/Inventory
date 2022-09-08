@@ -11,4 +11,3 @@ public class AddPostCommand : IRequest
     public string UserName { get; set; }
     public string ThreadName { get; set; }
 }
-

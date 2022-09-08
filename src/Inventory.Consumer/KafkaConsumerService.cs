@@ -66,8 +66,6 @@ internal class KafkaConsumerService : BackgroundService
         }
         _consumer.Close();
     }
-
-
     
     private ConsumeResult<string, string> GetMessageToProcces(ConsumeResult<string, string> prvMessage)
     {
