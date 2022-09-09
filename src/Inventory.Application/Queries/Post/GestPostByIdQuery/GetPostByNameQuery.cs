@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Inventory.Application.Queries.GestPostQuery;
 
-public class GetPostByIdQuery : IRequest<GetPostResponse>
+public class GetPostByNameQuery : IRequest<GetPostResponse>
 {
-    public Guid Id { get; set; }
+    public string Name { get; set; }
 }

@@ -26,16 +26,16 @@ public class PostController : ControllerBase
         return Ok(posts);
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{name}")]
     [ProducesResponseType(typeof(GetPostResponse), 200)]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    public async Task<IActionResult> GetById([FromRoute] string name)
     {
-        var post = await _mediatior.Send(new GetPostByIdQuery() { Id = id });
+        var post = await _mediatior.Send(new GetPostByNameQuery() { Name = name });
         return post is not null ? Ok(post) : NotFound();
     }
 
-    [HttpGet("{email}")]
+    [HttpGet("by-user/{email}")]
     [ProducesResponseType(typeof(List<GetPostResponse>), 200)]
     public async Task<IActionResult> GeUserPosts([FromRoute] string email)
     {

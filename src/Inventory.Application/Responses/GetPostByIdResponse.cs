@@ -8,7 +8,7 @@ public class GetPostResponse
     public string PostName { get; set; }
     public Uri? Uri { get; set; }
     public string Description { get; set; }
-    public string Email { get; set; }
+    public string UserName { get; set; }
     public int UpVotes { get; set; }
     public int DownVotes { get; set; }
     public DateTime TimeStamp { get; set; }

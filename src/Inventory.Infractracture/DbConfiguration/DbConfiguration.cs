@@ -17,7 +17,6 @@ public static class DbConfiguration
     public static IServiceCollection InitializeInfrasctracture(this IServiceCollection services, IConfiguration configuration)
     {
         var config = configuration.GetSection(nameof(DatabaseConfiguration)).Get<DatabaseConfiguration>();
-
         services.AddMediatR(Assembly.GetExecutingAssembly());
 
         services.AddSingleton(config)
@@ -32,7 +31,9 @@ public static class DbConfiguration
                 .AddScoped<ICommentWriteRepository, CommentWriteRepository>()
                 .AddScoped<IReadPostRepository, PostReadRepository>()
                 .AddScoped<IReadThreadRepository, ThreadReadRepository>()
-                .AddScoped<IVoteWriteRepository, VoteWriteRepository>();
+                .AddScoped<IVoteWriteRepository, VoteWriteRepository>()
+                .AddScoped<IReadCommentRepository, CommentReadRepository>();
+
         return services;
     }                                                                                               
 }

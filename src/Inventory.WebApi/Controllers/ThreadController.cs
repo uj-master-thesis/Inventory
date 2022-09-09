@@ -26,24 +26,4 @@ public class ThreadController : ControllerBase
         var threads = await _mediatior.Send(new GetListOfThreadsQuery());
         return Ok(threads);
     }
-
-    [Obsolete]
-    [HttpGet("{id}")]
-    [ProducesResponseType(typeof(GetThreadByIdResponse), 200)]
-    [ProducesResponseType(404)]
-    public async Task<IActionResult> GetById([FromRoute] Guid id)
-    {
-        var thread = await _mediatior.Send(new GetThreadByIdQuery() { Id = id });
-        return thread is not null ? Ok(thread) : NotFound();
-    }
-
-    [Obsolete]
-    [HttpGet("{id}/posts")]
-    [ProducesResponseType(typeof(GetThreadByIdWithPostsResponse), 200)]
-    [ProducesResponseType(404)]
-    public async Task<IActionResult> GetThreadPosts([FromRoute] Guid id)
-    {
-        var thread = await _mediatior.Send(new GetThreadWithPostsQuery() { ThreadId = id });
-        return thread is not null ? Ok(thread) : NotFound();
-    }
 }
