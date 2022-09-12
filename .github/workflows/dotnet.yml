@@ -6,12 +6,19 @@ on:
   pull_request:
     branches: [ "main" ]
 
+
+
 jobs:
   Inventory_tests:
 
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        repository: uj-master-thesis/Uploader
+        path: Uploader
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
