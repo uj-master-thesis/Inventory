@@ -3,6 +3,7 @@ using Inventory.Application.Commands.AddThreadCommand;
 using Inventory.Application.Commands.Comment.AddCommentCommand;
 using Inventory.Application.Commands.Vote;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -16,16 +17,19 @@ public interface ISenderMessage
 public class SenderMessage : ISenderMessage
 {
     private readonly IMediator _mediator;
+    private readonly ILogger<SenderMessage> _logger; 
     private const string AddThreadCommandKey = "name";
     private const string AddPostCommandKey = "threadName";
     private const string AddCommentCommandKey = "text";
     private const string AddVoteCommandKey = "voteType";
-    public SenderMessage(IMediator mediator)
+    public SenderMessage(IMediator mediator, ILogger<SenderMessage> logger)
     {
         _mediator = mediator;
+        _logger = logger; 
     }
     public Task SendAsync(string message)
     {
+        _logger.LogInformation($"Send message to mediaR; {message}"); 
         return _mediator.Send(GetCommand(message)); 
     }
 
@@ -42,4 +46,6 @@ public class SenderMessage : ISenderMessage
             _ => throw new NotImplementedException()
         };
     }
+
+
 }

@@ -43,7 +43,7 @@ public class EndToEndScenarioTest
     {
         PostName = Post.PostName,
         UserName = Post.UserName,
-        VoteType = Domain.Model.VoteType.UpVote
+        VoteType = "0"
     };
 
     [Fact]

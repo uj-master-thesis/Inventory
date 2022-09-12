@@ -21,11 +21,11 @@ internal class CommentReadRepository : ReadBaseRepository<Comment>, IReadComment
 
     public  Task<List<Comment>> GetListOfCommentsByPostName(string postName)
     {
-        return _inventoryWrite.Comments.Where(w => w.PostName == postName).ToListAsync(); 
+        return _inventoryWrite.Comments.Where(w => w.PostName == postName).OrderByDescending(w => w.TimeStamp).ToListAsync(); 
     }
 
     public Task<List<Comment>> GetListOfCommentsByUser(string user)
     {
-        return _inventoryWrite.Comments.Where(w => w.UserName == user).ToListAsync();
+        return _inventoryWrite.Comments.Where(w => w.UserName == user).OrderByDescending(w => w.TimeStamp).ToListAsync();
     }
 }

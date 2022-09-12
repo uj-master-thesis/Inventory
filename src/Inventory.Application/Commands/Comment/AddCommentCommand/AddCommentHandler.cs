@@ -23,6 +23,7 @@ public class AddCommentHandler : IRequestHandler<AddCommentCommand, Unit>
     public async Task<Unit> Handle(AddCommentCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation($"Executing command: Add post");
+        if (string.IsNullOrEmpty(request.Text)) return new Unit(); 
         var thread = _mapper.Map<Domain.Model.Comment>(request);
         await _writeRepository.Add(thread);
         await _mediator.Send(new UpdatePostTimespanCommand() { Name = request.PostName}); 

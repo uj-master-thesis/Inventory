@@ -24,7 +24,7 @@ internal class PostReadRepository : ReadBaseRepository<Post>, IReadPostRepositor
     private string InnerJoinComments => "LEFT JOIN  Comments as Co on Posts.Id = Co.PostId"; 
     public async Task<List<Post>> GetPostsByUser(string email)
     {
-        return await QueryList($"{QueryStringAll} WHERE Email = @Email", DynamincParametersFactory.CreateFromArray(new[] { ("@Email", email) }));
+        return await _contextTwo.Posts.Where(w => w.UserName == email).ToListAsync();
     }
 
     public async override Task<List<Post>> GetAll()

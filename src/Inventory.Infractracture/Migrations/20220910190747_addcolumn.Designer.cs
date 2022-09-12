@@ -4,6 +4,7 @@ using Inventory.Infractracture.DbConfiguration.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inventory.Infractracture.Migrations
 {
     [DbContext(typeof(InventoryWriteContext))]
-    partial class InventoryWriteContextModelSnapshot : ModelSnapshot
+    [Migration("20220910190747_addcolumn")]
+    partial class addcolumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,9 +62,6 @@ namespace Inventory.Infractracture.Migrations
 
                     b.Property<int>("DownVotes")
                         .HasColumnType("int");
-
-                    b.Property<string>("FileCompressed")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ThreadName")
                         .IsRequired()

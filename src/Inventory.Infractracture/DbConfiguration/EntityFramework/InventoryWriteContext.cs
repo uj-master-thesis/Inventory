@@ -25,7 +25,8 @@ public class InventoryWriteContext : DbContext
                    .IsRequired();
             builder.Property(w => w.Description)
                     .IsRequired();
-
+            builder.Property(w => w.FileCompressed);
+                   
             builder.HasOne(p => p.Thread)
                    .WithMany(t => t.Posts)
                    .HasForeignKey("ThreadName")
