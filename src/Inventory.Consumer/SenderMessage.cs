@@ -2,8 +2,11 @@
 using Inventory.Application.Commands.AddThreadCommand;
 using Inventory.Application.Commands.Comment.AddCommentCommand;
 using Inventory.Application.Commands.Vote;
+using Inventory.Application.Exceptions;
+using Inventory.Consumer.CircuitBreaker;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Polly;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -17,20 +20,25 @@ public interface ISenderMessage
 public class SenderMessage : ISenderMessage
 {
     private readonly IMediator _mediator;
-    private readonly ILogger<SenderMessage> _logger; 
+    private readonly ILogger<SenderMessage> _logger;
+    private readonly Policy _policy; 
     private const string AddThreadCommandKey = "name";
     private const string AddPostCommandKey = "threadName";
     private const string AddCommentCommandKey = "text";
     private const string AddVoteCommandKey = "voteType";
-    public SenderMessage(IMediator mediator, ILogger<SenderMessage> logger)
+    public SenderMessage(IMediator mediator, ILogger<SenderMessage> logger, IPolicyFactory _policyFactory)
     {
         _mediator = mediator;
-        _logger = logger; 
+        _logger = logger;
+        _policy = _policyFactory.CreateRetryAsync(); 
     }
-    public Task SendAsync(string message)
+    public async Task SendAsync(string message)
     {
-        _logger.LogInformation($"Send message to mediaR; {message}"); 
-        return _mediator.Send(GetCommand(message)); 
+        await _policy.Execute(async() =>
+                    {
+                        _logger.LogInformation($"Send message to mediaR; {message}");
+                        return await _mediator.Send(GetCommand(message));
+                    });
     }
 
     private static IRequest GetCommand(string message)

@@ -1,5 +1,7 @@
-﻿using Inventory.Application.Interfaces.WriteRepositories;
+﻿using Inventory.Application.Exceptions;
+using Inventory.Application.Interfaces.WriteRepositories;
 using Inventory.Infractracture.DbConfiguration.EntityFramework;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 
 namespace Inventory.Infractracture.WriteRepositories;
@@ -15,36 +17,52 @@ internal abstract class WriteBaseRepository<T> : IWriteRepository<T>  where T : 
     }
     virtual public async Task<T> Add(T entity)
     {
-        _inventoryContext.ChangeTracker.Clear();
-
-
-       _logger.LogInformation($"Added entity to db. Type: {typeof(T)}");
-        await _inventoryContext.Set<T>().AddAsync(entity);                              
-        await _inventoryContext.SaveChangesAsync();
-        return entity; 
+        try
+        {
+            _inventoryContext.ChangeTracker.Clear();
+            _logger.LogInformation($"Added entity to db. Type: {typeof(T)}");
+            await _inventoryContext.Set<T>().AddAsync(entity);
+            await _inventoryContext.SaveChangesAsync();
+            return entity;
+        }
+        catch (SqlException ex) when (ex.Number == -1 || ex.Number == 2 || ex.Number == 53)
+        {
+            throw new DBAccesException();
+        }
     }
 
     virtual public async Task<T> Delete(Guid id)
     {
-        _inventoryContext.ChangeTracker.Clear();
-
-        _logger.LogInformation($"Delete entity to db. Type: {typeof(T)}");
-        var entity = await _inventoryContext.Set<T>().FindAsync(id); 
-         _inventoryContext.Set<T>().Remove(entity);
-        await _inventoryContext.SaveChangesAsync();
-        return entity;
-        
+        try
+        {
+            _inventoryContext.ChangeTracker.Clear();
+            _logger.LogInformation($"Delete entity to db. Type: {typeof(T)}");
+            var entity = await _inventoryContext.Set<T>().FindAsync(id);
+            _inventoryContext.Set<T>().Remove(entity);
+            await _inventoryContext.SaveChangesAsync();
+            return entity;
+        }
+        catch (SqlException ex) when (ex.Number == -1 || ex.Number == 2 || ex.Number == 53)
+        {
+            throw new DBAccesException();
+        }
     }
 
     virtual public async Task<T> Update(T entity)
     {
-        _inventoryContext.ChangeTracker.Clear();
+        try
+        {
+            _inventoryContext.ChangeTracker.Clear();
+            _logger.LogInformation($"Update entity to db. Type: {typeof(T)}");
+            _inventoryContext.Set<T>().Update(entity);
+            await _inventoryContext.SaveChangesAsync();
+            return entity;
+        }
+        catch (SqlException ex) when (ex.Number == -1 || ex.Number == 2 || ex.Number == 53)
+        {
+            throw new DBAccesException(); 
+        }
 
-
-        _logger.LogInformation($"Update entity to db. Type: {typeof(T)}");
-        _inventoryContext.Set<T>().Update(entity);
-        await _inventoryContext.SaveChangesAsync();
-        return entity; 
     }
 }
                                            

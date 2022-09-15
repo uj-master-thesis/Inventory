@@ -19,7 +19,7 @@ public static class Consumer
             { "group.id", "group1" }
         });
         services.AddSingleton(config);
-        services.AddSingleton<ICircuitBreakerFactory, CircuitBreakerFactory>();
+        services.AddSingleton<IPolicyFactory, PolicyFactory>();
         services.AddSingleton<ISenderMessage, SenderMessage>(); 
         services.AddMediatR(Assembly.GetExecutingAssembly());                                                                                                               
         services.AddHostedService<KafkaConsumerService>();                                                       

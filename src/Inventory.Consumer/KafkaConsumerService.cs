@@ -17,22 +17,19 @@ namespace Inventory.Consumer;
 internal class KafkaConsumerService : BackgroundService
 {
     private readonly ILogger<KafkaConsumerService> _logger;
-    private readonly IMediator _mediator;
     private readonly IConsumer<string, string> _consumer;
     private readonly AsyncCircuitBreakerPolicy _circuitBreaker;
     private readonly ISenderMessage _sender; 
     public KafkaConsumerService(
         ILogger<KafkaConsumerService> logger,
-        IMediator mediator, 
-        IConsumer<string, string> consumer, 
-        ICircuitBreakerFactory circuitBreakerFactory,
+        IConsumer<string, string> consumer,
+        IPolicyFactory circuitBreakerFactory,
         ISenderMessage sender,
         KafkaConfiguration kafkaConfiguration)
     {
         _logger = logger;
-        _mediator = mediator;
         _consumer = consumer;
-        _circuitBreaker = circuitBreakerFactory.Create();
+        _circuitBreaker = circuitBreakerFactory.CreateCircuitBreaker();
         _sender = sender; 
         _consumer.Subscribe(new List<string> { kafkaConfiguration.TopicName }); 
     }
@@ -51,9 +48,13 @@ internal class KafkaConsumerService : BackgroundService
         {
             try
             {
-                mesageToConsume = GetMessageToProcces(mesageToConsume);
-                _logger.LogInformation($"Processing event. EventId: {mesageToConsume.Message.Key}");
-                await _sender.SendAsync(mesageToConsume.Message.Value);
+                await _circuitBreaker.ExecuteAsync(async () =>
+                {
+                    mesageToConsume = _consumer.Consume();
+                    _logger.LogInformation($"Processing event. EventId: {mesageToConsume.Message.Key}");
+                    await _sender.SendAsync(mesageToConsume.Message.Value);
+                });
+
             }
             catch (BrokenCircuitException brkEx)
             {
@@ -65,14 +66,5 @@ internal class KafkaConsumerService : BackgroundService
             }
         }
         _consumer.Close();
-    }
-    
-    private ConsumeResult<string, string> GetMessageToProcces(ConsumeResult<string, string> prvMessage)
-    {
-        //if (_circuitBreaker.CircuitState == CircuitState.Open)
-        //{
-        //    return prvMessage; 
-        //}
-        return _consumer.Consume(); 
     }
 }
