@@ -6,13 +6,27 @@ on:
   pull_request:
     branches: [ "main" ]
 
+
+
 jobs:
   Inventory_tests:
 
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout uploader
+      uses: actions/checkout@v3
+      with:
+        repository: uj-master-thesis/Uploader
+        path: Uploader
+    - name: Checkout gateway
+      uses: actions/checkout@v3
+      with:
+        repository: uj-master-thesis/Gateway
+        path: Gateway
     - uses: actions/checkout@v3
+    - name: Build the stack
+      run: docker-compose up -d
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
