@@ -62,7 +62,6 @@ internal abstract class WriteBaseRepository<T> : IWriteRepository<T>  where T : 
         {
             throw new DBAccesException(); 
         }
-
     }
 }
                                            
